@@ -34,6 +34,13 @@
 	# Rewrite all other URLs to index.php/URL
 	RewriteRule .* /index.php/$0 [PT]
 
+	<DirectoryMatch "/var/www/dev.compressr.cc">
+		AuthType Basic
+		AuthName "Restricted Area"
+		AuthUserFile /etc/apache2/users
+		Require valid-user
+	</DirectoryMatch>
+
 	# The configuration from here is taken from the HTML5 Boilerplate http://html5boilerplate.com/
 
 	<IfModule mod_setenvif.c>
@@ -55,15 +62,15 @@
 	AddType video/webm webm
 
 	# Proper svg serving. Required for svg webfonts on iPad
-	AddType image/svg+xml                 svg svgz
+	AddType image/svg+xml		      svg svgz
 
 	# webfonts
 	AddType application/vnd.ms-fontobject eot
-	AddType font/ttf                      ttf
-	AddType font/otf                      otf
-	AddType font/x-woff                   woff
+	AddType font/ttf		      ttf
+	AddType font/otf		      otf
+	AddType font/x-woff		      woff
 
-	AddType text/cache-manifest           manifest
+	AddType text/cache-manifest	      manifest
 
 	# gzip compression.
 	<IfModule mod_deflate.c>
@@ -82,37 +89,37 @@
 		ExpiresActive on
 
 		# Perhaps better to whitelist expires rules? Perhaps.
-		ExpiresDefault                          "access plus 1 month"
+		ExpiresDefault				"access plus 1 month"
 
 		# cache.manifest needs re-reqeusts in FF 3.6 (thx Remy ~Introducing HTML5)
-		ExpiresByType text/cache-manifest       "access plus 0 seconds"
+		ExpiresByType text/cache-manifest	"access plus 0 seconds"
 
 		# your document html 
-		ExpiresByType text/html                  "access"
+		ExpiresByType text/html			 "access"
 
 		# rss feed
-		ExpiresByType application/rss+xml       "access plus 1 hour"
+		ExpiresByType application/rss+xml	"access plus 1 hour"
 
 		# favicon (cannot be renamed)
-		ExpiresByType image/vnd.microsoft.icon  "access plus 1 week"
+		ExpiresByType image/vnd.microsoft.icon	"access plus 1 week"
 
 		# media: images, video, audio
-		ExpiresByType image/png                 "access plus 1 month"
-		ExpiresByType image/jpg                 "access plus 1 month"
-		ExpiresByType image/jpeg                "access plus 1 month"
-		ExpiresByType video/ogg                 "access plus 1 month"
-		ExpiresByType audio/ogg                 "access plus 1 month"
-		ExpiresByType video/mp4                 "access plus 1 month"
+		ExpiresByType image/png			"access plus 1 month"
+		ExpiresByType image/jpg			"access plus 1 month"
+		ExpiresByType image/jpeg		"access plus 1 month"
+		ExpiresByType video/ogg			"access plus 1 month"
+		ExpiresByType audio/ogg			"access plus 1 month"
+		ExpiresByType video/mp4			"access plus 1 month"
 
 		# webfonts
-		ExpiresByType font/ttf                  "access plus 1 month"
-		ExpiresByType font/woff                 "access plus 1 month"
-		ExpiresByType image/svg+xml             "access plus 1 month"
+		ExpiresByType font/ttf			"access plus 1 month"
+		ExpiresByType font/woff			"access plus 1 month"
+		ExpiresByType image/svg+xml		"access plus 1 month"
 
 		# css and javascript
-		ExpiresByType text/css                  "access plus 1 month"
-		ExpiresByType application/javascript    "access plus 1 month"
-		ExpiresByType text/javascript           "access plus 1 month"
+		ExpiresByType text/css			"access plus 1 month"
+		ExpiresByType application/javascript	"access plus 1 month"
+		ExpiresByType text/javascript		"access plus 1 month"
 	</IfModule>
 
 	FileETag None
