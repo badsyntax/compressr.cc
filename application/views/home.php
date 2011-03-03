@@ -1,6 +1,6 @@
-<div id="wrapper">
+<h1>compressr.cc</h1>
 
-	<h1>compressr.cc</h1>
+<div id="wrapper">
 
 	<?php if ($errors){?>
 		<div class="form-errors">
@@ -20,19 +20,22 @@
 					<h2><label for="choose-compressor">Choose your compressor:</label></h2>
 					<div class="field">
 						<select name="compressor" id="choose-compressor">
-							<option>Closure compiler</option>
-							<option>YUI compressor</option>
-							<option>Packer</option>
-							<option>Uglify</option>
+							<option value="closure">Closure compiler</option>
+							<option value="yui">YUI compressor</option>
+							<option value="packer">Packer</option>
+							<option value="uglify">Uglify</option>
 						</select>
 					</div>
 				</li>
 				<li>
 					<h2>Set the compressor options:</h2>
-					<fieldset>
-						<div class="field"><label><input type="checkbox" /> Option 1</label></div>
-						<div class="field"><label><input type="checkbox" /> Option 2</label></div>
-						<div class="field"><label><input type="checkbox" /> Option 3</label></div>
+					<fieldset class="options-container" id="options-yui">
+						<p>Type:</p>
+						<div class="field"><label><input type="radio" name="option-yui-type" value="js" checked="checked" /> Javascript</label></div>
+						<div class="field"><label><input type="radio" name="option-yui-type" value="css" /> CSS</label></div>
+					</fieldset>
+					<fieldset class="options-container" id="options-closure">
+						closure
 					</fieldset>
 				</li>
 				<li>
