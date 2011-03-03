@@ -18,7 +18,18 @@ class Controller_Welcome extends Controller_Template {
 		{
 			if ($data->check())
 			{
-				// compress the code
+				$config = array();
+				foreach($_POST as $key => $value)
+				{
+					if (strstr($key, 'option-'.$data['compressor']))
+					{
+						$config[str_replace('option-'.$data['compressor'].'-', '', $key)] = $value;
+					}
+				}
+				
+				$compressed = Compressor::factory($data['compressor'], $data['code'], $config)->compress();
+
+				die($compressed);
 			}
 	
 			if ($errors = $data->errors('compress'))
