@@ -5,6 +5,8 @@
 	<link href='http://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/cGss'>
 	<link href='http://fonts.googleapis.com/css?family=Gruppo' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Philosopher' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Crushed' rel='stylesheet' type='text/css'>
 	<style type="text/css">
 		html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video {
 			margin: 0;
@@ -26,11 +28,13 @@
 		ul, ol {
 			margin-left: 2em;
 		}
-		h1 {
-			text-indent: -999em;
-		}
 		h1, h2, h3, h4 {
 			font-family: 'Droid Sans', 'Gruppo', 'Ubuntu', arial, serif;
+		}
+		h1 {
+			font-family: 'Crushed', arial, serif;
+			font-size: 356%;
+			margin: .5em 0 .5em 0;
 		}
 		h2 {
 			font-weight: normal;
@@ -76,11 +80,13 @@
 		.form-errors {
 			margin-bottom: 2em;
 		}
+		.options-container {
+		}
 
 
 		#wrapper {
 			width: 600px;
-			margin: 2em auto;
+			margin: 1em auto;
 			border: 1px solid #eee;
 			padding: 1em;
 		}
@@ -109,5 +115,6 @@
 </head>
 <body>
 	<?php echo $content?>
+	<?php echo View::factory('footer')?>
 </body>
 </html>
