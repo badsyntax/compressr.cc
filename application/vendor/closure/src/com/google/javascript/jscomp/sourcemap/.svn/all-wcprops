@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/809/trunk/src/com/google/javascript/jscomp/sourcemap
+END
+SourceMapSection.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/809/trunk/src/com/google/javascript/jscomp/sourcemap/SourceMapSection.java
+END
+FilePosition.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/809/trunk/src/com/google/javascript/jscomp/sourcemap/FilePosition.java
+END
+SourceMapGenerator.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/809/trunk/src/com/google/javascript/jscomp/sourcemap/SourceMapGenerator.java
+END
+SourceMapGeneratorV1.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/809/trunk/src/com/google/javascript/jscomp/sourcemap/SourceMapGeneratorV1.java
+END
+SourceMapGeneratorV2.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/809/trunk/src/com/google/javascript/jscomp/sourcemap/SourceMapGeneratorV2.java
+END
+Util.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/795/trunk/src/com/google/javascript/jscomp/sourcemap/Util.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/795/trunk/src/com/google/javascript/jscomp/sourcemap/package.html
+END
