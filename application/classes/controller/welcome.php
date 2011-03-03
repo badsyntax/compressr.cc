@@ -7,7 +7,7 @@ class Controller_Welcome extends Controller_Template {
 	public function action_index()
 	{
 		$this->template->title = __('Home');
-		$this->template->content = View::factory('home')
+		$this->template->content = View::factory( Kohana::$environment === Kohana::PRODUCTION ? 'coming_soon' : 'home')
 			->bind('errors', $errors);
 
 		$data = Validation::factory($_POST)
