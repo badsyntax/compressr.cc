@@ -6,36 +6,40 @@ abstract class Compressor_Compressor {
 
 	protected $_default_config = array();
 
-	protected $_code;
+	protected $_in_filename;
 
-	protected $_filename;
+	protected $_out_filename;
+
+	protected $_compressed;
 
 	public function __construct($config=array(), $code=NULL)
 	{
 		$this->_config = array_merge($this->_default_config, $config);
+
 		do
 		{
-			$this->_filename = '/tmp/' . Text::random();
+			$this->_in_filename = '/tmp/' . Text::random();
 		}
-		while (file_exists($this->_filename));
+		while (file_exists($this->_in_filename));
 
-		file_put_contents($this->_filename, $code);
+		do
+		{
+			$this->_out_filename = '/tmp/' . Text::random();
+		}
+		while (file_exists($this->_out_filename));
+
+		file_put_contents($this->_in_filename, $code);
 	}
 
 	public function __destruct()
 	{
 		try
 		{
-			unlink($this->_filename);
+			unlink($this->_in_filename);
+			unlink($this->_out_filename);
 		}
 		catch (Exception $e) {}
 	}
 
 	abstract public function compress();
-
-	public function set_config($key, $value)
-	{
-		$this->_config[$key] = $value;
-		return $this;
-	}
 }
