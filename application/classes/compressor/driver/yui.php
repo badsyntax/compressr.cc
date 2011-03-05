@@ -9,8 +9,16 @@ class Compressor_Driver_Yui extends Compressor_Compressor {
 	public function compress()
 	{
 		$jar = APPPATH . 'vendor/yuicompressor/build/yuicompressor-2.4.2.jar';
-		$cmd = sprintf('cat %s | java -jar %s --type %s', escapeshellarg($this->_filename), escapeshellarg($jar), escapeshellarg($this->_config['type']));
-		$output = `{$cmd}`;
-		return $output;
+		$cmd = sprintf('java -jar %s %s --type %s -o %s',
+			escapeshellarg($jar), 
+			escapeshellarg($this->_in_filename), 
+			escapeshellarg($this->_config['type']),
+			escapeshellarg($this->_out_filename)
+		);
+
+		$this->_errors = `{$cmd}`;
+		$this->_compressed = file_get_contents($this->_out_filename);
+
+		return $this->_compressed;
 	}
 }

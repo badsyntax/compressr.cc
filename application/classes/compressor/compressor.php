@@ -35,11 +35,24 @@ abstract class Compressor_Compressor {
 	{
 		try
 		{
-			unlink($this->_in_filename);
-			unlink($this->_out_filename);
+			//unlink($this->_in_filename);
+			//unlink($this->_out_filename);
 		}
 		catch (Exception $e) {}
 	}
 
 	abstract public function compress();
+
+	public function config_values()
+	{
+		$options = array();
+		foreach($this->_config as $key => $val)
+		{
+			if ($val !== FALSE AND $val !== NULL AND isset($this->_config_values[$key]))
+			{
+				$options[] = $this->_config_values[$key];
+			}
+		}
+		return $options;
+	}
 }
