@@ -25,15 +25,15 @@ class Controller_Welcome extends Controller_Template {
 		);
 
 		$options_closure_compilation_levels = array(
-			'WHITESPACE_ONLY',
-			'SIMPLE_OPTIMIZATIONS',
-			'ADVANCED_OPTIMIZATIONS',
+			'WHITESPACE_ONLY' => 'WHITESPACE_ONLY',
+			'SIMPLE_OPTIMIZATIONS' => 'SIMPLE_OPTIMIZATIONS',
+			'ADVANCED_OPTIMIZATIONS' => 'ADVANCED_OPTIMIZATIONS',
 		);
 		
 		$options_closure_warning_levels = array(
-			'QUIET',
-			'DEFAULT',
-			'VERBOSE'
+			'QUIET' => 'QUIET',
+			'DEFAULT' => 'DEFAULT',
+			'VERBOSE' => 'VERBOSE'
 		);
 
 		if ($_POST)

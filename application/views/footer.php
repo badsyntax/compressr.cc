@@ -5,8 +5,9 @@
 		$('#compressor')
 			.bind('change.compressor', function(){
 				optionContainers.hide();
-				$('#options-' + this.value).show();
+				$('#options-' + this.value).fadeIn(200);
 			})
 			.trigger('change.compressor');	
+		$('#code').focus();
 	})(this, this.jQuery);
 </script>
