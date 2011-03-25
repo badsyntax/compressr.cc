@@ -19,7 +19,7 @@
 
 <div class="container" role="main">
 
-	<?php echo Form::open(), "\n"?>
+	<?php echo Form::open(NULL, array('id' => 'compressor-form')), "\n"?>
 		<fieldset>
 			<ol id="option-list">
 				<li class="clear">
@@ -32,7 +32,7 @@
 						<?php echo Form::select('compressor', $compressors, @$_POST['compressor']), "\n"?>
 					</div>
 				</li>
-				<li>
+				<li id="compressor-options">
 					<fieldset class="options-container" id="options-yui">
 						<ul>
 							<li class="clear">
@@ -138,8 +138,8 @@
 					</fieldset>
 				</li>
 				<li>
-					<label for="code">Code</label>
-					<?php echo Form::textarea('code', @$_POST['code'], NULL, TRUE, $errors), "\n"?>
+					<label for="codetext">Code</label>
+					<?php echo Form::textarea('codetext', @$_POST['codetext'], NULL, TRUE, $errors), "\n"?>
 				</li>
 				<li>
 					<button type="submit">
