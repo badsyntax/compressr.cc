@@ -12,21 +12,15 @@ abstract class Compressor_Compressor {
 
 	protected $_compressed;
 
+	protected $_errors;
+	
+	abstract public function compress();
+
 	public function __construct($config=array(), $code=NULL)
 	{
 		$this->_config = array_merge($this->_default_config, $config);
-
-		do
-		{
-			$this->_in_filename = '/tmp/' . Text::random();
-		}
-		while (file_exists($this->_in_filename));
-
-		do
-		{
-			$this->_out_filename = '/tmp/' . Text::random();
-		}
-		while (file_exists($this->_out_filename));
+		$this->_in_filename = $this->unique_tmp_filename();
+		$this->_out_filename = $this->unique_tmp_filename();
 
 		file_put_contents($this->_in_filename, $code);
 	}
@@ -35,24 +29,38 @@ abstract class Compressor_Compressor {
 	{
 		try
 		{
-			//unlink($this->_in_filename);
-			//unlink($this->_out_filename);
+			unlink($this->_in_filename);
+			unlink($this->_out_filename);
 		}
 		catch (Exception $e) {}
 	}
+	
+	private function unique_tmp_filename()
+	{
+		do
+		{
+			$filename = '/tmp/' . Text::random();
+		}
+		while (file_exists($filename));
+	
+		return $filename;
+	}
 
-	abstract public function compress();
+	public function errors()
+	{
+		return array();
+	}
 
 	public function config_values()
 	{
-		$options = array();
+		$config = array();
 		foreach($this->_config as $key => $val)
 		{
 			if ($val !== FALSE AND $val !== NULL AND isset($this->_config_values[$key]))
 			{
-				$options[] = $this->_config_values[$key];
+				$config[] = $this->_config_values[$key];
 			}
 		}
-		return $options;
+		return $config;
 	}
 }
