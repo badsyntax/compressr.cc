@@ -16,7 +16,7 @@ h1 a{color:#FFF;}
 h2{border-bottom:1px solid #EEE;font-size:1.2em;font-weight:bold;font-weight:normal;margin-bottom:.8em;padding-bottom:.4em;}
 h2 label{font-size:1.2em;font-weight:bold;}
 em{font-style:italic;}
-a, a:visited{text-decoration:none;}
+a, a:visited{color:#990000;}
 
 /* Forms */
 fieldset{border:0;}
@@ -44,11 +44,15 @@ button, .button {overflow:visible;white-space:nowrap;padding:.5em;cursor:pointer
 	/* For Internet Explorer 8 */
 	-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr=#FF0000FF, endColorstr=#FFFFFFFF)";
 }
-.form-errors{}
-.form-errors ul{color:#F22;margin:0 0 0 2em;}
 .field, .label.field-style{float:left;padding-left:.6em;text-align:left;width:48%;}
 .label, .field.label-style{float:left;font-weight:normal;padding-left:0;padding-top:2px;text-align:right;width:49%;}
 .checkbox{margin:0;padding:0;}
+
+/* Header */
+h1 a, h1 a:visited{color:#FFF;text-decoration:none;}
+
+#errors-container{text-align:left;padding:1.1em;}
+#errors-container ul{margin:0 0 0 2em;}
 
 /* Compressor options */
 .options-container{}
@@ -62,8 +66,19 @@ button, .button {overflow:visible;white-space:nowrap;padding:.5em;cursor:pointer
 #option-list textarea{-moz-box-shadow:0 0 3px #888;-webkit-box-shadow:0 0 3px #888;border:1px solid #CCC;box-shadow:0 0 3px #888;height:18em;width:656px;}
 #option-list textarea.loading{background:url(/img/ajax-loader.gif) no-repeat center center;}
 
+/* Code area options */
+#select-all{display:none;position:absolute;top:0;right:0;font-size:.8em;}
+
+
+/* JS */
+.js .errors-container {
+}
+.js #select-all{display:block;}
+
 /* Helpers */
 .hide{display:none;}
 .clear:before, .clear:after{content:"\0020";display:block;height:0;overflow:hidden;}
 .clear:after{clear:both;}
 .clear{zoom:1;}
+.left{float:left;}
+.right{float:right;}

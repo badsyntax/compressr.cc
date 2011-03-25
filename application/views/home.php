@@ -5,15 +5,7 @@
 </header>
 
 <?php if ($errors){?>
-	<div class="container" style="text-align:left">
-		<div class="form-errors">
-			<ul>
-			<?php foreach($errors as $error => $message){?>
-				<li><?php echo $message?></li>		
-			<?php }?>
-			</ul>
-		</div>
-	</div>
+	<?php echo View::factory('errors')?>
 <?php }?>
 
 
@@ -138,6 +130,7 @@
 					</fieldset>
 				</li>
 				<li>
+					<a id="select-all" href="#" title="Select all text">[Select all]</a>
 					<label for="codetext">Code</label>
 					<?php echo Form::textarea('codetext', @$_POST['codetext'], NULL, TRUE, $errors), "\n"?>
 				</li>

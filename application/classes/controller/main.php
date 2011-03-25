@@ -1,9 +1,8 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class Controller_Welcome extends Controller_Template {
+class Controller_Main extends Controller_Template {
 
 	public $template = 'master_page';
-
 
 	public function after()
 	{
@@ -23,10 +22,11 @@ class Controller_Welcome extends Controller_Template {
 	{
 		$this->template->title = __('home');
 		$this->template->content = View::factory( Kohana::$environment === Kohana::PRODUCTION ? 'coming_soon' : 'home')
-			->bind('errors', $errors)
 			->bind('compressors', $compressors)
 			->bind('options_closure_compilation_levels', $options_closure_compilation_levels)
 			->bind('options_closure_warning_levels', $options_closure_warning_levels);
+
+		$this->template->content->bind_global('errors', $errors);
 		
 		$data = Validation::factory($_POST);
 		$data->rule('codetext', 'not_empty');
@@ -52,7 +52,7 @@ class Controller_Welcome extends Controller_Template {
 		);
 
 		if (!$_POST) return;
-		
+
 		if ($data->check())
 		{
 			$config = array();
@@ -67,7 +67,11 @@ class Controller_Welcome extends Controller_Template {
 			$compressor = Compressor::factory($data['compressor'], $data['codetext'], $config);
 			
 			$data['codetext'] = $compressor->compress();
-			$data['compressor_errors'] = $compressor->errors();
+
+			if (!$data['compressor_errors'] = (array) $compressor->errors())
+			{
+				unset($data['compressor_errors']);
+			}
 		}
 
 		$errors = $data->errors('compress');
@@ -77,7 +81,12 @@ class Controller_Welcome extends Controller_Template {
 		if ($this->request->is_ajax())
 		{
 			$data = $data->as_array();
-			$data['errors'] = $errors;
+
+			if (!$data['errors'] = (array) $errors)
+			{
+				unset($data['errors']);
+			}
+
 			$this->template->content = json_encode($data);
 
 			$this->response->headers('Content-Type', 'application/json');
