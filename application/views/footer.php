@@ -4,8 +4,6 @@
 (function(){
 	Compressr.init({
 		environment: '<?php echo Kohana::$environment === Kohana::DEVELOPMENT ? 'development' : 'production'?>',
-		paths: {"base":"\/admin"},
-		param: {},
 		route: {
 			controller: 'main',
 			action: 'index'

@@ -23,13 +23,8 @@
 	if (window.Compressr) { return; }
 
 	var 
-		// Defaults
-		config = {
-			environment: 'production',
-			route: { controller: 'main', action: 'index' }
-		}
 		// Constants
-		, cons = {
+		cons = {
 			BEGIN: 1,
 			END: 0,
 			RESET: -1,
@@ -44,9 +39,9 @@
 	Compressr.util = {};
 	Compressr.cons = cons;
 	
-	Compressr.init = function(options){
+	Compressr.init = function(config){
 		
-		this.config = $.extend(config, options);
+		this.config = config
 		
 		var 
 			self = this
@@ -65,149 +60,33 @@
 					benchmark_time = benchmark_end - benchmark_start;
 			}
 		}
-				
 		function bootstrap(route, param){
-			// Check the route
+
 			if (!route.controller || !route.action) return;
-			// Get the controller
+
 			var controller = self.controller[route.controller];
-			// Does this controller exist?
 			if (!controller) return;
-			// Extend the base controller with controller methods
+
 			controller = $.extend({}, new Controller(route.controller), controller);
-			// Execute before controller init method
 			controller.before && controller.before();
-			// Execute the init method (building the UI etc...)
 			controller.init();
-			// Execute the request action
 			controller['action_' + route.action] && controller['action_' + route.action].call(controller, param);
-			// Execute after method
 			controller.after && controller.after();			
 		}
 		
-		function setup(){
-			// Global Ajax event handlers
-			$.ajaxSetup({
-				error: function(xhr, textStatus, error, callback) {
-					setTimeout(function(){
-						Compressr.util.events.register('error', 'ajax');
-						alert('Sorry, an unexpected error occured. Please try again.');
-						(callback) && callback.apply();
-					});
-				}
-			});		
-		}
-		
-		// Expose the benchmark results
-		this.benchmark = function(){
-			return { benchmark_start: benchmark_start }			
-		};
-		
-		// Start the benchmark
 		benchmark(cons.BEGIN);
-		// Build page elements and init interactions
-		setup();
-		// Begin the routing
 		bootstrap(config.route, config.param);
-		// Stop the benchmark
 		benchmark(cons.END);
+
 		// If environment mode is DEVELOPMENT then log the benchmark results
-		this.config.environment == cons.DEVELOPMENT && this.util.log('executed in: ' + benchmark_time + 'ms');
+		this.config.environment == cons.DEVELOPMENT 
+			&& this.util.log('executed in: ' + benchmark_time + 'ms');
 	};
 	
 	// Base controller constructor
-	function Controller(name){
-		this.controller = name || 'controller';
-		this.init = function(){ };
-		// Base init stuff here		
-	}
+	function Controller(name){ this.controller = name || 'controller'; }
 
-	Compressr.util.log = function(msg){
-		window.console && window.console.log && window.console.log(msg);
-	};
-
-	Compressr.util.cookie = {
-		config : {
-			expiredays: 1,
-			path: '/',
-			name: 'kohanasite'
-		},
-		_save : function(key, val, expiredays){
-
-			expiredays = expiredays || this.config.expiredays || null;
-
-			var expiredate = new Date();
-			expiredate.setDate(expiredate.getDate() + expiredays);
-
-			var data = this.get();
-			data = (data) ? JSON.parse(data) :  {};
-			data[key] = val;
-			data = escape(JSON.stringify(data));
-
-			document.cookie = 
-				this.config.name + '=' 
-				+ data
-				+ ((expiredays === null) 
-						? '' 
-						: ';expires=' + expiredate.toGMTString()) 
-				+ ';path=' + this.config.path;
-		},
-		get : function(key){
-
-			if (!document.cookie.length) return;
-
-			var start = document.cookie.indexOf(this.config.name + '=');
-			if (start === -1) return '';
-			start = start + this.config.name.length + 1;
-
-			var end = document.cookie.indexOf(';', start);
-			if (end === -1) end = document.cookie.length;
-
-			var data = unescape(document.cookie.substring(start, end));
-
-			return key ? data[key] : data;			
-		},
-		set : function(key, val, expiredays){
-			this._save(key, val, expiredays);
-		}
-	};
-
-	Compressr.util.events = {
-
-		callbacks : {},
-
-		register : function(eventname, namespace, vars){
-
-			namespace = namespace || 'default';
-			vars = vars || {};
-
-			var self = this;
-
-			(this.callbacks[eventname] && this.callbacks[eventname][namespace]) &&
-				$.each(this.callbacks[eventname][namespace], function(i){
-					(this.callback && this.callback.constructor == Function) && this.callback(vars);
-					(this.fireonce) && delete self.callbacks[eventname][namespace][i];
-				});
-		}
-	};
-
-	Compressr.util.hooks = {
-
-		register : function(eventname, namespace, callback, fireonce) {
-
-			namespace = namespace || 'default';
-			fireonce = fireonce || false;
-
-			if (!Compressr.events.callbacks[eventname]) {
-				Compressr.util.events.callbacks[eventname] = [];
-				Compressr.util.events.callbacks[eventname][namespace] = [];
-			}
-			Compressr.util.events.callbacks[eventname][namespace].push({
-				callback: callback,
-				fireonce: fireonce
-			});
-		}
-	};
+	Compressr.util.log = function(msg){ window.console && window.console.log && window.console.log(msg); };
 
 	window.Compressr = Compressr;
 		
@@ -225,6 +104,7 @@
 	Compressr.controller.main = {
 		
 		before: function(){
+
 			this.elem = {
 				codeTextarea: $('#codetext'),
 				options: $('#compressor-options'), 
@@ -233,6 +113,11 @@
 				errorsContainer: $('#errors-container'),
 				selectAll: $('#select-all')
 			};
+
+			this._cacheImages([
+				'/img/ajax-loader.gif',
+				'/img/error.png'
+			]);
 		},
 		
 		init: function(){
@@ -240,9 +125,7 @@
 			var self = this;
 
 			self._bindOptionsHandler();
-
 			self._bindFormSubmitHandler();
-
 			self._bindSelectAllHandler();
 
 			self.elem.codeTextarea.focus();
@@ -251,6 +134,12 @@
 				self._getPanels();
 			}, 50);
 		},
+
+		_cacheImages: function(images){
+			$.each(images, function(key, val){
+				var img = $('<img />').attr('src', val);
+			});
+		},
 	
 		_bindSelectAllHandler: function(){
 			var self = this;
@@ -258,11 +147,14 @@
 				event.preventDefault();
 				try {
 					self.elem.codeTextarea[0].select();
+					self.elem.codeTextarea[0].focus();
 				} catch(e){ }
 			});
 		},
 
 		_bindFormSubmitHandler: function(){
+
+			var self = this;
 	
 			function formSubmitHandler(event){
 
@@ -292,9 +184,13 @@
 
 					(data.errors) && self._showErrors(data.errors);
 					(data.compressor_errors) && self._showErrors(data.compressor_errors, true);
-					(!data.compressor_errors && !data.errors) && self.elem.errorsContainer.hide();
 
-					self.elem.codeTextarea[0].focus();
+					if (!data.compressor_errors && !data.errors) {
+						self.elem.errorsContainer.hide();
+						self.elem.selectAll.trigger('click');
+					} else {
+						self.elem.codeTextarea[0].focus();
+					}
 				}
 
 				function errorHandler(){
@@ -369,7 +265,11 @@
 					// Append the error
 					self.elem.errorsContainer.find('ul').append('<li>' + val + '</li>');
 				});
-			self.elem.errorsContainer.show();
+			self.elem.errorsContainer.hide().fadeIn(200);
+
+			var offset = self.elem.errorsContainer.offset();
+
+			$(window).scrollTop(offset.top - 14);
 		},
 				
 		after: function(){},

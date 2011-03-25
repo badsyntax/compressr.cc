@@ -17,6 +17,7 @@ h2{border-bottom:1px solid #EEE;font-size:1.2em;font-weight:bold;font-weight:nor
 h2 label{font-size:1.2em;font-weight:bold;}
 em{font-style:italic;}
 a, a:visited{color:#990000;}
+a:focus{outline: dotted #990000 1px};
 
 /* Forms */
 fieldset{border:0;}
@@ -52,7 +53,9 @@ button, .button {overflow:visible;white-space:nowrap;padding:.5em;cursor:pointer
 h1 a, h1 a:visited{color:#FFF;text-decoration:none;}
 
 #errors-container{text-align:left;padding:1.1em;}
-#errors-container ul{margin:0 0 0 2em;}
+#errors-container ul{margin:0;}
+#errors-container li{list-style:none;background:url(/img/error.png) no-repeat left top;padding-left:20px;margin-bottom:.5em;font-size:.95em;}
+#errors-container li:last-child{margin:0;}
 
 /* Compressor options */
 .options-container{}
