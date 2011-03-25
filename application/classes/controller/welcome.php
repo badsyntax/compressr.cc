@@ -4,9 +4,24 @@ class Controller_Welcome extends Controller_Template {
 
 	public $template = 'master_page';
 
+
+	public function after()
+	{
+		if ($this->request->is_ajax())
+		{
+			// Use the template content as the response
+			$this->response->body($this->template->content);
+		} 
+		else 
+		{
+			parent::after();
+		}
+	}
+
+
 	public function action_index()
 	{
-		$this->template->title = __('Home');
+		$this->template->title = __('home');
 		$this->template->content = View::factory( Kohana::$environment === Kohana::PRODUCTION ? 'coming_soon' : 'home')
 			->bind('errors', $errors)
 			->bind('compressors', $compressors)
@@ -14,14 +29,14 @@ class Controller_Welcome extends Controller_Template {
 			->bind('options_closure_warning_levels', $options_closure_warning_levels);
 		
 		$data = Validation::factory($_POST);
-		$data->rule('code', 'not_empty');
+		$data->rule('codetext', 'not_empty');
 
 		$compressors = array(
 			'closure' => 'Closure compiler',
 			'yui' => 'YUI compressor',
-			'packer' => 'PACKER',
 			'uglify' => 'Uglify',
-			'all' => 'All'
+			//'packer' => 'PACKER',
+			//'all' => 'All'
 		);
 
 		$options_closure_compilation_levels = array(
@@ -49,7 +64,10 @@ class Controller_Welcome extends Controller_Template {
 					}
 				}
 				
-				$data['code'] = Compressor::factory($data['compressor'], $data['code'], $config)->compress();
+				$compressor = Compressor::factory($data['compressor'], $data['codetext'], $config);
+				
+				$data['codetext'] = $compressor->compress();
+				//$data['errors'] = $compressor->errors();
 			}
 	
 			if ($errors = $data->errors('compress'))
@@ -57,8 +75,17 @@ class Controller_Welcome extends Controller_Template {
 				// Set the error flash message
 				// Message::set(Message::ERROR, __('Please correct the errors.'));
 			}
-		}
 
-		$_POST = $data->as_array();
+			$_POST = $data->as_array();
+
+			if ( $this->request->is_ajax() )
+			{
+				$data = $data->as_array();
+				$data['errors'] = $errors;
+				$this->template->content = json_encode($data);
+
+				$this->response->headers('Content-Type', 'application/json');
+			}
+		}
 	}
 }
