@@ -34,6 +34,25 @@
 
 	$('#code').focus();
 
+	// TODO: formatting should probably be done on the backenbd to 
+	// prevent sensitive data from being displayed
+	function showErrors(errors){
+		(errors) && 
+			$.each(errors, function(key, val){
+
+				// Only show error string with 'ERROR', 'DEBUG' or 'WARNING' keywords
+				if (!/ERROR|DEBUG|WARNING/.test(val)){
+					return;//continue
+				}
+
+				// Strip the tmp filename
+				val = val.replace(/^\/tmp\/[a-zA-Z0-9]+:?/, '');
+
+				// FIXME
+				$('.container').eq(0).append('<p>' + val + '</p>');
+			});
+	}
+
 	function formSubmitHandler(event){
 
 		event.preventDefault();
@@ -49,20 +68,33 @@
 		}
 
 		function successHandler(data){
+
 			enableTextarea();
+
+			if (!data){
+				showErrors([ 'There was an error processing the request, please try again.' ]);
+				return;
+			}
+
 			var code = $.trim(data.codetext);
-			(code) && elem.codeTextarea.val(code);
+			(code && code !== 'undefined') && elem.codeTextarea.val(code);
+
+			if (data.compressor_errors) {
+				showErrors(data.compressor_errors);
+			}
 		}
 
 		function errorHandler(){
 			enableTextarea();
+			showErrors([ 'There was an error processing the request, please try again.' ]);
 		}
 
+		// TODO: error handling: timeout; status codes etc
 		jqxhr = $.ajax({
 			url: this.action,
 			type: 'POST',
 			dataType: 'json',
-			data: $('#compressor-form').serialize()
+			data: $(this).serialize()
 		})
 		.success(successHandler)
 		.error(errorHandler);

@@ -18,14 +18,14 @@ class Compressor_Driver_Uglify extends Compressor_Compressor {
 	{
 		$path = '/home/richard/local/node/lib/node/uglify-js/bin/uglifyjs';
 
-		$cmd = sprintf('%s --output %s %s %s',
+		$cmd = sprintf('%s --output %s %s %s 2>&1',
 			$path,
 			escapeshellarg($this->_out_filename),
 			implode(' ', parent::config_values()),
 			escapeshellarg($this->_in_filename)
 		);
 
-		$this->_errors = `{$cmd}`;
+		exec($cmd, $this->_errors);
 
 		try
 		{

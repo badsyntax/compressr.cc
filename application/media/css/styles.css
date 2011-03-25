@@ -57,7 +57,7 @@ button, .button {overflow:visible;white-space:nowrap;padding:.5em;cursor:pointer
 #option-list .options-container li:last-child{margin-bottom:0;}
 .container{-moz-border-radius:10px;-webkit-border-radius:10px;background:#FFF;border-radius:10px;margin:1em auto;padding:1.8em 1.1em;width:660px;}
 #option-list{margin:0;}
-#option-list li{list-style:none;margin-bottom:2em;position:relative;}
+#option-list li{list-style:none;margin-bottom:1.8em;position:relative;}
 #option-list li:last-child{margin-bottom:.1em;}
 #option-list textarea{-moz-box-shadow:0 0 3px #888;-webkit-box-shadow:0 0 3px #888;border:1px solid #CCC;box-shadow:0 0 3px #888;height:18em;width:656px;}
 #option-list textarea.loading{background:url(/img/ajax-loader.gif) no-repeat center center;}

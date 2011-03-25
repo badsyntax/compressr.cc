@@ -12,7 +12,7 @@ abstract class Compressor_Compressor {
 
 	protected $_compressed;
 
-	protected $_errors;
+	protected $_errors = array();
 	
 	abstract public function compress();
 
@@ -22,6 +22,7 @@ abstract class Compressor_Compressor {
 		$this->_in_filename = $this->unique_tmp_filename();
 		$this->_out_filename = $this->unique_tmp_filename();
 
+		// Save the code in a tmp file
 		file_put_contents($this->_in_filename, $code);
 	}
 
@@ -29,8 +30,8 @@ abstract class Compressor_Compressor {
 	{
 		try
 		{
-			unlink($this->_in_filename);
-			unlink($this->_out_filename);
+			//unlink($this->_in_filename);
+			//unlink($this->_out_filename);
 		}
 		catch (Exception $e) {}
 	}
@@ -48,7 +49,7 @@ abstract class Compressor_Compressor {
 
 	public function errors()
 	{
-		return array();
+		return $this->_errors;
 	}
 
 	public function config_values()

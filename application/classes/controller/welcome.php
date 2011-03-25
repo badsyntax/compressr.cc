@@ -51,41 +51,36 @@ class Controller_Welcome extends Controller_Template {
 			'VERBOSE' => 'VERBOSE'
 		);
 
-		if ($_POST)
+		if (!$_POST) return;
+		
+		if ($data->check())
 		{
-			if ($data->check())
+			$config = array();
+			foreach($_POST as $key => $value)
 			{
-				$config = array();
-				foreach($_POST as $key => $value)
+				if (strstr($key, 'option-'.$data['compressor']))
 				{
-					if (strstr($key, 'option-'.$data['compressor']))
-					{
-						$config[str_replace('option-'.$data['compressor'].'-', '', $key)] = $value;
-					}
+					$config[str_replace('option-'.$data['compressor'].'-', '', $key)] = $value;
 				}
-				
-				$compressor = Compressor::factory($data['compressor'], $data['codetext'], $config);
-				
-				$data['codetext'] = $compressor->compress();
-				//$data['errors'] = $compressor->errors();
 			}
-	
-			if ($errors = $data->errors('compress'))
-			{
-				// Set the error flash message
-				// Message::set(Message::ERROR, __('Please correct the errors.'));
-			}
+		
+			$compressor = Compressor::factory($data['compressor'], $data['codetext'], $config);
+			
+			$data['codetext'] = $compressor->compress();
+			$data['compressor_errors'] = $compressor->errors();
+		}
 
-			$_POST = $data->as_array();
+		$errors = $data->errors('compress');
 
-			if ( $this->request->is_ajax() )
-			{
-				$data = $data->as_array();
-				$data['errors'] = $errors;
-				$this->template->content = json_encode($data);
+		$_POST = $data->as_array();
 
-				$this->response->headers('Content-Type', 'application/json');
-			}
+		if ($this->request->is_ajax())
+		{
+			$data = $data->as_array();
+			$data['errors'] = $errors;
+			$this->template->content = json_encode($data);
+
+			$this->response->headers('Content-Type', 'application/json');
 		}
 	}
 }

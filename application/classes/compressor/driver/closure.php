@@ -15,7 +15,9 @@ class Compressor_Driver_Closure extends Compressor_Compressor {
 	public function compress()
 	{
 		$jar = APPPATH . 'vendor/closure/build/compiler.jar';
-		$cmd = sprintf('java -jar %s --compilation_level %s --warning_level %s %s --js %s --js_output_file %s', 
+	
+		// stderr will be redirected to stdout
+		$cmd = sprintf('java -jar %s --compilation_level %s --warning_level %s %s --js %s --js_output_file %s 2>&1', 
 			escapeshellarg($jar), 
 			escapeshellarg($this->_config['compilation_level']),
 			escapeshellarg($this->_config['warning_level']),
@@ -24,7 +26,8 @@ class Compressor_Driver_Closure extends Compressor_Compressor {
 			escapeshellarg($this->_out_filename)
 		);
 
-		$this->_errors = `{$cmd}`;
+		exec($cmd, $this->_errors);
+
 		$this->_compressed = file_get_contents($this->_out_filename);
 
 		return $this->_compressed;
