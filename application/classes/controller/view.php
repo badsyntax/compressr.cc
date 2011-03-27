@@ -1,14 +1,23 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Controller_View extends Controller {
+	
+	protected $view;
+
+	public function after()
+	{
+		$this->response->body($this->view);
+	}
 
 	public function action_error()
 	{
-		$errors_view = View::factory('errors')
-			->bind('errors', $errors);
+		$this->view = View::factory('errors')
+			->set('errors', array());
+	}
 
-		$errors = array();
-
-		$this->response->body($errors_view);
+	public function action_info()
+	{
+		$this->view = View::factory('info')
+			->set('info', array());
 	}
 }

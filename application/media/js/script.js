@@ -62,13 +62,12 @@
 		}
 		function bootstrap(route, param){
 
-			if (!route.controller || !route.action) return;
+			if (!route.controller || !route.action) { return; }
 
 			var controller = self.controller[route.controller];
-			if (!controller) return;
+			if (!controller) { return; }
 
 			controller = $.extend({}, new Controller(route.controller), controller);
-			controller.before && controller.before();
 			controller.init();
 			controller['action_' + route.action] && controller['action_' + route.action].call(controller, param);
 			controller.after && controller.after();			
@@ -103,32 +102,30 @@
 	
 	Compressr.controller.main = {
 		
-		before: function(){
+		init: function(){
 
-			this.elem = {
-				codeTextarea: $('#codetext'),
-				options: $('#compressor-options'), 
-				optionContainers: $('.options-container'),
-				loader: $('<img />').attr('src', '/img/ajax-loader.gif'),
-				errorsContainer: $('#errors-container'),
-				selectAll: $('#select-all')
-			};
-
+			var self = this;
+			
 			this._cacheImages([
 				'/img/ajax-loader.gif',
 				'/img/error.png'
 			]);
-		},
-		
-		init: function(){
+			
+			this.elem = {
+				codeTextarea: $('#codetext'),
+				options: $('#compressor-options'), 
+				optionContainers: $('#compressor-options').find('.options-container'),
+				errorsContainer: $('#errors-container'),
+				infoContainer: $('#info-container'),
+				selectAll: $('#code-select-all'),
+				clearCode: $('#code-clear')
+			};
 
-			var self = this;
+			this._bindOptionsHandler();
+			this._bindFormSubmitHandler();
+			this._bindCodeToolHandlers();
 
-			self._bindOptionsHandler();
-			self._bindFormSubmitHandler();
-			self._bindSelectAllHandler();
-
-			self.elem.codeTextarea.focus();
+			this.elem.codeTextarea.focus();
 			
 			window.setTimeout(function(){
 				self._getPanels();
@@ -141,7 +138,7 @@
 			});
 		},
 	
-		_bindSelectAllHandler: function(){
+		_bindCodeToolHandlers: function(){
 			var self = this;
 			this.elem.selectAll.click(function(event){
 				event.preventDefault();
@@ -150,56 +147,64 @@
 					self.elem.codeTextarea[0].focus();
 				} catch(e){ }
 			});
+			this.elem.clearCode.click(function(event){
+				event.preventDefault();
+				self.elem.codeTextarea.val('')[0].focus();
+			});
 		},
 
 		_bindFormSubmitHandler: function(){
 
 			var self = this;
+
+			function enableTextarea(){
+				self.elem.codeTextarea
+					.removeClass('loading')
+					.removeAttr('disabled');
+			}
+
+			function disableTextarea(){
+				self.elem.codeTextarea
+					.addClass('loading')
+					.attr('disabled', 'disabled');
+			}
+
+			function successHandler(data){
+
+				enableTextarea();
+
+				if (!data){
+					self._showErrors([ 'There was an error processing the request, please try again.' ]);
+					return;
+				}
+
+				var code = $.trim(data.codetext);
+
+				if (code && code !== 'undefined') { self.elem.codeTextarea.val(code); }
+
+				if (data.errors) { self._showErrors(data.errors); }
+
+				if (data.compressor_errors) { self._showErrors(data.compressor_errors, true); }
+
+				if (!data.compressor_errors && !data.errors) {
+					self._showSizes(data.sizes);
+					self.elem.errorsContainer.hide();
+					self.elem.selectAll.trigger('click');
+				} else {
+					self.elem.codeTextarea[0].focus();
+				}
+			}
+
+			function errorHandler(){
+				enableTextarea();
+				self._showErrors([ 'There was an error processing the request, please try again.' ]);
+			}
 	
 			function formSubmitHandler(event){
 
 				event.preventDefault();
 
-				var jqxhr;
-
-				function enableTextarea(){
-					self.elem.codeTextarea.removeClass('loading').removeAttr('disabled');
-				}
-
-				function disableTextarea(){
-					self.elem.codeTextarea.addClass('loading').attr('disabled', 'disabled');
-				}
-
-				function successHandler(data){
-
-					enableTextarea();
-
-					if (!data){
-						self._showErrors([ 'There was an error processing the request, please try again.' ]);
-						return;
-					}
-
-					var code = $.trim(data.codetext);
-					(code && code !== 'undefined') && self.elem.codeTextarea.val(code);
-
-					(data.errors) && self._showErrors(data.errors);
-					(data.compressor_errors) && self._showErrors(data.compressor_errors, true);
-
-					if (!data.compressor_errors && !data.errors) {
-						self.elem.errorsContainer.hide();
-						self.elem.selectAll.trigger('click');
-					} else {
-						self.elem.codeTextarea[0].focus();
-					}
-				}
-
-				function errorHandler(){
-					enableTextarea();
-					self._showErrors([ 'There was an error processing the request, please try again.' ]);
-				}
-
-				// TODO: error handling: timeout; status codes etc
-				jqxhr = $.ajax({
+				var jqxhr = $.ajax({
 					url: this.action,
 					type: 'POST',
 					dataType: 'json',
@@ -236,13 +241,18 @@
 				dataType: 'HTML'
 			})
 			.success(function(data){
-
 				self.elem.errorsContainer = $(data).hide();
-
 				$('header:first').after(self.elem.errorsContainer);
-			})
-			.error(function(){
+			});
 
+			$.ajax({
+				url: '/view/info',
+				type: 'GET',
+				dataType: 'HTML'
+			})
+			.success(function(data){
+				self.elem.infoContainer = $(data).hide();
+				$('header:first').after(self.elem.infoContainer);
 			});
 		},
 
@@ -250,30 +260,57 @@
 		// prevent sensitive data from being displayed
 		_showErrors: function(errors, compressorErr){
 
-			var self = this;
+			var self = this, list = this.elem.errorsContainer.find('ul').empty();
 
-			self.elem.errorsContainer.find('ul').empty();
+			this.elem.infoContainer.hide();
 
 			compressorErr = compressorErr === undefined ? false : compressorErr; 
 
-			(errors) && 
-				$.each(errors, function(key, val){
-					// Only show error string with 'ERROR', 'DEBUG' or 'WARNING' keywords
-					if (compressorErr && !/ERROR|DEBUG|WARNING/.test(val)){ return; }
-					// Strip the tmp filename
-					val = val.replace(/^\/tmp\/[a-zA-Z0-9]+:?/, '');
-					// Append the error
-					self.elem.errorsContainer.find('ul').append('<li>' + val + '</li>');
-				});
-			self.elem.errorsContainer.hide().fadeIn(200);
+			var e = 0;
+			$.each(errors, function(key, val){
+				// Only show error string with 'ERROR', 'DEBUG' or 'WARNING' keywords
+				if (compressorErr && !/ERROR|DEBUG|WARNING/.test(val)){ return; }
+				// Strip the tmp filename
+				val = val.replace(/^\/tmp\/[a-zA-Z0-9]+:?/, '');
+				// Append the error
+				list.append('<li>' + val + '</li>');
+				// Total errors
+				e++;
+			});
+				
+			if (!e){
+				list.append('<li>Unknown error.</li>');
+			}
 
-			var offset = self.elem.errorsContainer.offset();
+			this.elem.errorsContainer.hide().fadeIn(200);
 
+			var offset = this.elem.errorsContainer.offset();
 			$(window).scrollTop(offset.top - 14);
 		},
-				
-		after: function(){},
+
+		_showInfo: function(messages){
+
+			var self = this, list = this.elem.infoContainer.find('ul').empty();
+			
+			this.elem.errorsContainer.hide();
+
+			$.each(messages, function(key, val){
+				list.append('<li>' + val + '</li>');
+			});
+
+			this.elem.infoContainer.hide().fadeIn(200);
+
+			var offset = this.elem.infoContainer.offset();
+			$(window).scrollTop(offset.top - 14);
+		},
+
+		_showSizes: function(sizes){
+
+			var msg = 'Total size: ' + sizes.out_size + ' bytes. Saved ' + (sizes.in_size - sizes.out_size) + ' bytes.';
 		
+			this._showInfo([msg]);
+		},
+				
 		action_index: function(){}
 	};
 		

@@ -1,7 +1,7 @@
 <?php
 
-class Compressor {
-
+class Compressor
+{
 	public static function factory($type, $code=NULL, $config=array())
 	{
 		$compressor = 'Compressor_Driver_'.ucfirst($type);

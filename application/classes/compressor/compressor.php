@@ -12,6 +12,10 @@ abstract class Compressor_Compressor {
 
 	protected $_compressed;
 
+	protected $_in_size;
+
+	protected $_out_size;
+
 	protected $_errors = array();
 	
 	abstract public function compress();
@@ -47,9 +51,17 @@ abstract class Compressor_Compressor {
 		return $filename;
 	}
 
-	public function errors()
+	public function get_errors()
 	{
 		return $this->_errors;
+	}
+
+	public function get_sizes()
+	{
+		return array(
+			'in_size' => mb_strlen(file_get_contents($this->_in_filename)),
+			'out_size' => mb_strlen(file_get_contents($this->_out_filename))
+		);
 	}
 
 	public function config_values()

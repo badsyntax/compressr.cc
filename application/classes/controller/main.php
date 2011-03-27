@@ -21,7 +21,7 @@ class Controller_Main extends Controller_Template {
 	public function action_index()
 	{
 		$this->template->title = __('home');
-		$this->template->content = View::factory( Kohana::$environment === Kohana::PRODUCTION ? 'coming_soon' : 'home')
+		$this->template->content = View::factory(Kohana::$environment === Kohana::PRODUCTION ? 'coming_soon' : 'home')
 			->set('compressors', Kohana::config('compressor.compressors'))
 			->set('options_closure_compilation_levels', Kohana::config('compressor.options_closure_compilation_levels'))
 			->set('options_closure_warning_levels', Kohana::config('compressor.options_closure_warning_levels'));
@@ -47,13 +47,12 @@ class Controller_Main extends Controller_Template {
 			$compressor = Compressor::factory($data['compressor'], $data['codetext'], $config);
 			
 			$data['codetext'] = $compressor->compress();
+			$data['sizes'] = $compressor->get_sizes();
 
 			if (!$data['compressor_errors'] = (array) $compressor->get_errors())
 			{
 				unset($data['compressor_errors']);
 			}
-
-			$data['sizes'] = $compressor->get_sizes();
 		}
 
 		$errors = $data->errors('compress');

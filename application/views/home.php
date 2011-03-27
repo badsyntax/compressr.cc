@@ -8,8 +8,7 @@
 	<?php echo View::factory('errors')?>
 <?php }?>
 
-
-<div class="container" role="main">
+<div class="container box" role="main">
 
 	<?php echo Form::open(NULL, array('id' => 'compressor-form')), "\n"?>
 		<fieldset>
@@ -130,7 +129,10 @@
 					</fieldset>
 				</li>
 				<li>
-					<a id="select-all" href="#" title="Select all text">[Select all]</a>
+					<div class="code-tools">
+						<?php echo HTML::anchor('#', 'Select all', array('id' => 'code-select-all'))?> |
+						<?php echo HTML::anchor('#', 'Clear', array('id' => 'code-clear'))?>
+					</div>
 					<label for="codetext">Code</label>
 					<?php echo Form::textarea('codetext', @$_POST['codetext'], NULL, TRUE, $errors), "\n"?>
 				</li>
@@ -143,3 +145,5 @@
 		</fieldset>
 	<?php echo Form::close(), "\n"?>
 </div>
+
+<?php echo View::factory('navigation')?>
