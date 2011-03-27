@@ -22,34 +22,14 @@ class Controller_Main extends Controller_Template {
 	{
 		$this->template->title = __('home');
 		$this->template->content = View::factory( Kohana::$environment === Kohana::PRODUCTION ? 'coming_soon' : 'home')
-			->bind('compressors', $compressors)
-			->bind('options_closure_compilation_levels', $options_closure_compilation_levels)
-			->bind('options_closure_warning_levels', $options_closure_warning_levels);
+			->set('compressors', Kohana::config('compressor.compressors'))
+			->set('options_closure_compilation_levels', Kohana::config('compressor.options_closure_compilation_levels'))
+			->set('options_closure_warning_levels', Kohana::config('compressor.options_closure_warning_levels'));
 
 		$this->template->content->bind_global('errors', $errors);
 		
 		$data = Validation::factory($_POST);
 		$data->rule('codetext', 'not_empty');
-
-		$compressors = array(
-			'closure' => 'Closure compiler',
-			'yui' => 'YUI compressor',
-			'uglify' => 'Uglify',
-			//'packer' => 'PACKER',
-			//'all' => 'All'
-		);
-
-		$options_closure_compilation_levels = array(
-			'WHITESPACE_ONLY' => 'WHITESPACE_ONLY',
-			'SIMPLE_OPTIMIZATIONS' => 'SIMPLE_OPTIMIZATIONS',
-			'ADVANCED_OPTIMIZATIONS' => 'ADVANCED_OPTIMIZATIONS',
-		);
-		
-		$options_closure_warning_levels = array(
-			'QUIET' => 'QUIET',
-			'DEFAULT' => 'DEFAULT',
-			'VERBOSE' => 'VERBOSE'
-		);
 
 		if (!$_POST) return;
 
@@ -68,10 +48,12 @@ class Controller_Main extends Controller_Template {
 			
 			$data['codetext'] = $compressor->compress();
 
-			if (!$data['compressor_errors'] = (array) $compressor->errors())
+			if (!$data['compressor_errors'] = (array) $compressor->get_errors())
 			{
 				unset($data['compressor_errors']);
 			}
+
+			$data['sizes'] = $compressor->get_sizes();
 		}
 
 		$errors = $data->errors('compress');
