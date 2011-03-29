@@ -1,62 +1,24 @@
-<header>
-	<h1>
-		<?php echo HTML::anchor('/', 'compressr.cc')?>
-	</h1>
-</header>
-
-<?php if ($errors){?>
-	<?php echo View::factory('errors')?>
-<?php }?>
-
 <div class="container box" role="main">
 
 	<?php echo Form::open(NULL, array('id' => 'compressor-form')), "\n"?>
 		<fieldset>
 			<ol id="option-list">
 				<li class="clear">
-					<div class="label">
-						<label for="compressor">
-							Compressor
-						</label>
-					</div>
-					<div class="field">
-						<?php echo Form::select('compressor', $compressors, @$_POST['compressor']), "\n"?>
-					</div>
+					<fieldset>
+						<h2>Choose the compressor</h2>
+						<div class="label">
+							<label for="compressor">
+								Compressor
+							</label>
+						</div>
+						<div class="field">
+							<?php echo Form::select('compressor', $compressors, @$_POST['compressor']), "\n"?>
+						</div>
+					</fieldset>
 				</li>
 				<li id="compressor-options">
-					<fieldset class="options-container" id="options-yui">
-						<ul>
-							<li class="clear">
-								<div class="label">
-									Type
-								</div>
-								<div class="field">
-									<label>
-										<?php echo Form::radio(
-											'option-yui-type', 
-											'js', 
-											(@$_POST['option-yui-type'] == 'js' or !@$_POST['option-yui-type']), 
-											array('class' => 'radio', 'id' => 'option-yui-type-js'), 
-											$errors
-										), "\n"?>
-										Javascript
-									</label>
-									<br />
-									<label>
-										<?php echo Form::radio(
-											'option-yui-type', 
-											'css', 
-											(@$_POST['option-yui-type'] == 'css'), 
-											array('class' => 'radio', 'id' => 'option-yui-type-css'), 
-											$errors
-										), "\n"?>
-										CSS
-									</label>
-								</div>
-							</li>
-						</ul>
-					</fieldset>
 					<fieldset class="options-container" id="options-closure">
+						<h2>Closure Compiler options</h2>
 						<ul>
 							<li class="clear">
 								<div class="label">
@@ -90,7 +52,41 @@
 							</li>
 						</ul>
 					</fieldset>
+					<fieldset class="options-container" id="options-yui">
+						<h2>YUI compressor options</h2>
+						<ul>
+							<li class="clear">
+								<div class="label">
+									Type
+								</div>
+								<div class="field">
+									<label>
+										<?php echo Form::radio(
+											'option-yui-type', 
+											'js', 
+											(@$_POST['option-yui-type'] == 'js' or !@$_POST['option-yui-type']), 
+											array('class' => 'radio', 'id' => 'option-yui-type-js'), 
+											$errors
+										), "\n"?>
+										Javascript
+									</label>
+									<br />
+									<label>
+										<?php echo Form::radio(
+											'option-yui-type', 
+											'css', 
+											(@$_POST['option-yui-type'] == 'css'), 
+											array('class' => 'radio', 'id' => 'option-yui-type-css'), 
+											$errors
+										), "\n"?>
+										CSS
+									</label>
+								</div>
+							</li>
+						</ul>
+					</fieldset>
 					<fieldset class="options-container" id="options-uglify">
+						<h2>UglifyJS options</h2>
 						<ul>
 							<li class="clear">
 								<div class="field label-style">
@@ -124,17 +120,16 @@
 							</li>
 						</ul>
 					</fieldset>
-					<fieldset class="options-container" id="options-all">
-						<p><em>(Using default options)</em></p>
-					</fieldset>
 				</li>
 				<li>
-					<div class="code-tools">
-						<?php echo HTML::anchor('#', 'Select all', array('id' => 'code-select-all'))?> |
-						<?php echo HTML::anchor('#', 'Clear', array('id' => 'code-clear'))?>
-					</div>
-					<label for="codetext">Code</label>
-					<?php echo Form::textarea('codetext', @$_POST['codetext'], NULL, TRUE, $errors), "\n"?>
+					<fieldset>
+						<div class="code-tools">
+							<?php echo HTML::anchor('#', 'Select all', array('id' => 'code-select-all'))?> |
+							<?php echo HTML::anchor('#', 'Clear', array('id' => 'code-clear'))?>
+						</div>
+						<label for="codetext">Code</label>
+						<?php echo Form::textarea('codetext', @$_POST['codetext'], array('spellcheck' => 'false'), TRUE, $errors), "\n"?>
+					</fieldset>
 				</li>
 				<li>
 					<button type="submit">
@@ -145,5 +140,3 @@
 		</fieldset>
 	<?php echo Form::close(), "\n"?>
 </div>
-
-<?php echo View::factory('navigation')?>
