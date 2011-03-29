@@ -5,7 +5,7 @@ class Controller_Main extends Controller_Base {
 	public function action_index()
 	{
 		$this->template->title = __('home');
-		$this->template->content = View::factory(Kohana::$environment === Kohana::PRODUCTION ? 'coming_soon' : 'home')
+		$this->template->content = View::factory('home')
 			->set('compressors', Kohana::config('compressor.compressors'))
 			->set('options_closure_compilation_levels', Kohana::config('compressor.options_closure_compilation_levels'))
 			->set('options_closure_warning_levels', Kohana::config('compressor.options_closure_warning_levels'));
