@@ -20,6 +20,7 @@ class Compressor_Driver_Yui extends Compressor_Compressor {
 
 		exec($cmd, $this->_errors);
 
+
 		try
 		{
 			$this->_compressed = file_get_contents($this->_out_filename);

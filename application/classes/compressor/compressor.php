@@ -34,8 +34,8 @@ abstract class Compressor_Compressor {
 	{
 		try
 		{
-			//unlink($this->_in_filename);
-			//unlink($this->_out_filename);
+			unlink($this->_in_filename);
+			unlink($this->_out_filename);
 		}
 		catch (Exception $e) {}
 	}
@@ -53,14 +53,32 @@ abstract class Compressor_Compressor {
 
 	public function get_errors()
 	{
-		return $this->_errors;
+		$errors = array();
+
+		foreach($this->_errors as $key => $error)
+		{
+			if (!trim($error) OR !preg_match('/ERROR|DEBUG|WARNING/', $error)) {
+
+				continue;
+			}
+
+			$errors[] = preg_replace('/^\/tmp\/[a-zA-Z0-9]+:?/', '', $error);
+		}
+
+		return count($errors) ? $errors : count($this->_errors) ? array('Uknown compilation error. Check your code for errors.') : array();
 	}
 
 	public function get_sizes()
 	{
 		return array(
-			'in_size' => mb_strlen(file_get_contents($this->_in_filename)),
-			'out_size' => mb_strlen(file_get_contents($this->_out_filename))
+			'bytes' => array(
+				'in_size' => @filesize($this->_in_filename),
+				'out_size' => @filesize($this->_out_filename)
+			),
+			'human_readable' => array(
+				'in_size' => Text::bytes(@filesize($this->_in_filename)),
+				'out_size' => Text::bytes(@filesize($this->_out_filename)) 
+			)
 		);
 	}
 
