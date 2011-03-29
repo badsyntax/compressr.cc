@@ -6,7 +6,7 @@ return array(
 	'compressors' => array(
 		'closure' => 'Closure compiler',
 		'yui' => 'YUI compressor',
-		'uglify' => 'Uglify',
+		'uglify' => 'UglifyJS',
 		//'packer' => 'PACKER',
 		//'all' => 'All'
 	),
