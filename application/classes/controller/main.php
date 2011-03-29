@@ -1,22 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class Controller_Main extends Controller_Template {
-
-	public $template = 'master_page';
-
-	public function after()
-	{
-		if ($this->request->is_ajax())
-		{
-			// Use the template content as the response
-			$this->response->body($this->template->content);
-		} 
-		else 
-		{
-			parent::after();
-		}
-	}
-
+class Controller_Main extends Controller_Base {
 
 	public function action_index()
 	{
@@ -26,16 +10,20 @@ class Controller_Main extends Controller_Template {
 			->set('options_closure_compilation_levels', Kohana::config('compressor.options_closure_compilation_levels'))
 			->set('options_closure_warning_levels', Kohana::config('compressor.options_closure_warning_levels'));
 
-		$this->template->content->bind_global('errors', $errors);
+		$this->template->bind_global('errors', $errors);
 		
 		$data = Validation::factory($_POST);
 		$data->rule('codetext', 'not_empty');
 
-		if (!$_POST) return;
+		if (!$_POST)
+		{
+			return;
+		}
 
 		if ($data->check())
 		{
 			$config = array();
+
 			foreach($_POST as $key => $value)
 			{
 				if (strstr($key, 'option-'.$data['compressor']))
@@ -48,11 +36,7 @@ class Controller_Main extends Controller_Template {
 			
 			$data['codetext'] = $compressor->compress();
 			$data['sizes'] = $compressor->get_sizes();
-
-			if (!$data['compressor_errors'] = (array) $compressor->get_errors())
-			{
-				unset($data['compressor_errors']);
-			}
+			$data['compressor_errors'] = $compressor->get_errors();
 		}
 
 		$errors = $data->errors('compress');
@@ -63,10 +47,7 @@ class Controller_Main extends Controller_Template {
 		{
 			$data = $data->as_array();
 
-			if (!$data['errors'] = (array) $errors)
-			{
-				unset($data['errors']);
-			}
+			$data['errors'] = $errors;
 
 			$this->template->content = json_encode($data);
 
