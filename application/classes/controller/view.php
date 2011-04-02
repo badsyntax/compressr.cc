@@ -9,15 +9,9 @@ class Controller_View extends Controller {
 		$this->response->body($this->view);
 	}
 
-	public function action_error()
+	public function action_messages()
 	{
-		$this->view = View::factory('errors')
-			->set('errors', array());
-	}
-
-	public function action_info()
-	{
-		$this->view = View::factory('info')
+		$this->view = View::factory('messages')
 			->set('info', array());
 	}
 }
