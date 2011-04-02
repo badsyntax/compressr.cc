@@ -131,7 +131,7 @@
 						<?php echo Form::textarea('codetext', @$_POST['codetext'], array('spellcheck' => 'false'), TRUE, $errors), "\n"?>
 					</fieldset>
 				</li>
-				<li>
+				<li class="last">
 					<button type="submit">
 						Compress it!
 					</button>
