@@ -1,4 +1,5 @@
 <div class="container box" role="main">
+	<div class="bg">
 
 	<?php echo Form::open(NULL, array('id' => 'compressor-form')), "\n"?>
 		<fieldset>
@@ -139,4 +140,5 @@
 			</ol>
 		</fieldset>
 	<?php echo Form::close(), "\n"?>
+	</div>
 </div>

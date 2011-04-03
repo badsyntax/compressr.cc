@@ -77,10 +77,17 @@ button:active{
 h1 a,h1 a:visited{color:#FFF;text-decoration:none;}
 
 /* Containers */
-.box{-moz-border-radius:10px;-webkit-border-radius:10px;background:#FFF;border-radius:10px;padding:1.8em 1.1em;}
-.container{margin:0 auto;width:660px;}
+.box{-moz-border-radius:10px;-webkit-border-radius:10px;background:#FFF;border-radius:10px;}
+.box .bg{padding:1.8em 1.1em;}
+.ie6 .box, 
+.ie7 .box, 
+.ie8 .box {background:url(/img/box_bot_bg.png) no-repeat 0 bottom;padding-bottom:10px;}
+.ie6 .box .bg, 
+.ie7 .box .bg, 
+.ie8 .box .bg {background:#FFF url(/img/box_top_bg.png) no-repeat 0 0;}
+.container{margin:0 auto;width:700px;}
 .container.box{margin:1em auto;}
-#message-container{padding:.6em 1em;text-align:left;}
+#message-container .bg{padding:.6em 1em;text-align:left;}
 #message-container ul{margin:0;}
 #message-container li{font-size:.95em;line-height:18px;list-style:none;margin-bottom:.5em;min-height:16px;padding-left:24px;}
 #message-container li:last-child{margin:0;}
