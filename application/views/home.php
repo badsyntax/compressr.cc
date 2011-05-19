@@ -128,8 +128,8 @@
 							<?php echo HTML::anchor('#', 'Select all', array('id' => 'code-select-all'))?> |
 							<?php echo HTML::anchor('#', 'Clear', array('id' => 'code-clear'))?>
 						</div>
-						<label for="codetext">Code</label>
-						<?php echo Form::textarea('codetext', @$_POST['codetext'], array('spellcheck' => 'false'), TRUE, $errors), "\n"?>
+						<label for="code">Code</label>
+						<?php echo Form::textarea('code', @$_POST['code'], array('spellcheck' => 'false'), TRUE, $errors), "\n"?>
 					</fieldset>
 				</li>
 				<li class="last">

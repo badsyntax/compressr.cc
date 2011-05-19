@@ -13,7 +13,7 @@ class Controller_Main extends Controller_Base {
 		$this->template->bind_global('errors', $errors);
 		
 		$data = Validation::factory($_POST);
-		$data->rule('codetext', 'not_empty');
+		$data->rule('code', 'not_empty');
 
 		if (!$_POST)
 		{
@@ -32,9 +32,9 @@ class Controller_Main extends Controller_Base {
 				}
 			}
 		
-			$compressor = Compressor::factory($data['compressor'], $data['codetext'], $config);
+			$compressor = Compressor::factory($data['compressor'], $data['code'], $config);
 			
-			$data['codetext'] = $compressor->compress();
+			$data['code'] = $compressor->compress();
 			$data['sizes'] = $compressor->get_sizes();
 			$data['compressor_errors'] = $compressor->get_errors();
 		}

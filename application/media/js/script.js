@@ -4,7 +4,7 @@
 this.Compressr = (function(window, $){
 
 	var config, elem = { 
-		codeTextarea:		$('#codetext'),
+		codeTextarea:		$('#code'),
 		form:			$('#compressor-form'),
 		select:			$('#compressor'),
 		options:		$('#compressor-options'), 
