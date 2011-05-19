@@ -33,7 +33,7 @@
 	RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
 
 	# Media folders
-	RewriteRule  ^/(js|css)/([a-z\.]+)$	/application/media/$1/$2 [L]
+	RewriteRule  ^/(js|css|img)/(.*?)$	/application/media/$1/$2 [L]
 
 	# Rewrite all other URLs to index.php/URL
 	RewriteRule .* /index.php/$0 [PT]

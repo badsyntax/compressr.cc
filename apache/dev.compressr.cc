@@ -4,10 +4,10 @@
 	ServerName	dev.compressr.cc
 
 	# Access logs
-	CustomLog	/var/log/apache2/compressr-dev.cc-alogs combined
+	CustomLog	/var/log/apache2/dev.compressr.cc-alogs combined
 
 	# Error logs
-	ErrorLog	/var/log/apache2/compressr-dev.cc-elogs
+	ErrorLog	/var/log/apache2/dev.compressr.cc-elogs
 
 	# Directory Index
 	DirectoryIndex index.php
@@ -32,7 +32,7 @@
 	RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
 
 	# Media folders	
-	RewriteRule  ^/(js|css)/([a-z\.]+)$	/application/media/$1/$2 [L]
+	RewriteRule  ^/(js|css|img)/(.*?)$	/application/media/$1/$2 [L]
 
 	# Rewrite all other URLs to index.php/URL
 	RewriteRule .* /index.php/$0 [PT]
