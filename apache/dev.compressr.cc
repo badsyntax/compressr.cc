@@ -15,14 +15,14 @@
 	# Set environment to production
 	SetEnv KOHANA_ENV development
 
-	# Turn on URL rewriting	
-	RewriteEngine On
-
 	# Protect hidden files from being viewed
 	<Files .*>
 		Order Deny,Allow
 		Deny From All
 	</Files>
+	
+	# Turn on URL rewriting	
+	RewriteEngine On
 
 	# Protect application and system files from being viewed
 	RewriteRule ^(?:application|modules|system)\b.* /index.php/$0 [L]
@@ -31,9 +31,13 @@
 	RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
 	RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
 
+	# Media folders	
+	RewriteRule  ^/(js|css)/([a-z\.]+)$	/application/media/$1/$2 [L]
+
 	# Rewrite all other URLs to index.php/URL
 	RewriteRule .* /index.php/$0 [PT]
 
+	# Secure the dev area
 	<DirectoryMatch "/var/www/dev.compressr.cc">
 		AuthType Basic
 		AuthName "Restricted Area"
