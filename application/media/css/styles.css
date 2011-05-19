@@ -101,7 +101,6 @@ h1 a,h1 a:visited{color:#FFF;text-decoration:none;}
 .navigation a:hover{color:#FFF;}
 
 /* Compressor options */
-.options-container{margin-bottom:2em;}
 .options-container ul{margin:0;}
 #option-list{margin:0;}
 #option-list li{list-style:none;margin-bottom:1.8em;position:relative;height:1%;}
