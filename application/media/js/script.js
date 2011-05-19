@@ -138,8 +138,8 @@ this.Compressr = (function(window, $){
 	function bindOptionsHandler(){
 		elem.select
 		.bind('change.compressor', function(){
-			//elem.optionContainers.hide();
-			//$('#options-' + this.value).show();
+			elem.optionContainers.hide();
+			$('#options-' + this.value).show();
 		})
 		.trigger('change.compressor');	
 	}
@@ -170,11 +170,6 @@ this.Compressr = (function(window, $){
 	
 		$.each(messages, function(key, val){
 			list.append('<li>' + val + '</li>');
-		});
-
-		elem.msgContainer.find('.close').one('click', function(){
-			elem.msgContainer.fadeOut();
-			return false;
 		});
 
 		scrollTop(elem.msgContainer.fadeIn(200));

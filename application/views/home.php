@@ -4,6 +4,19 @@
 	<?php echo Form::open(NULL, array('id' => 'compressor-form')), "\n"?>
 		<fieldset>
 			<ol id="option-list">
+				<li class="clear">
+					<fieldset>
+						<h2>Choose the compressor</h2>
+						<div class="label">
+							<label for="compressor">
+								Compressor
+							</label>
+						</div>
+						<div class="field">
+							<?php echo Form::select('compressor', $compressors, @$_POST['compressor']), "\n"?>
+						</div>
+					</fieldset>
+				</li>
 				<li id="compressor-options">
 					<fieldset class="options-container" id="options-closure">
 						<h2>Closure Compiler options</h2>
@@ -111,23 +124,11 @@
 				</li>
 				<li>
 					<fieldset>
-						<div class="clear" style="padding-bottom:.6em;">
-							<div class="label accessibly-hide">
-								<label for="compressor">
-									Compressor
-								</label>
-							</div>
-							<div style="float:left">
-								<?php echo Form::select('compressor', $compressors, @$_POST['compressor']), "\n"?>
-							</div>
-							<img src="/img/gear.png" style="float:left;margin:3px 0 0 8px" />
-							<a href="#" style="float:left;margin:5px 0 0 4px;font-size:.8em;">Options</a>
-							<div class="code-tools">
-								<?php echo HTML::anchor('#', 'Select all', array('id' => 'code-select-all'))?> |
-								<?php echo HTML::anchor('#', 'Clear', array('id' => 'code-clear'))?>
-							</div>
+						<div class="code-tools">
+							<?php echo HTML::anchor('#', 'Select all', array('id' => 'code-select-all'))?> |
+							<?php echo HTML::anchor('#', 'Clear', array('id' => 'code-clear'))?>
 						</div>
-						<label for="codetext" class="accessibly-hide">Code</label>
+						<label for="codetext">Code</label>
 						<?php echo Form::textarea('codetext', @$_POST['codetext'], array('spellcheck' => 'false'), TRUE, $errors), "\n"?>
 					</fieldset>
 				</li>
