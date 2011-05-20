@@ -1,12 +1,6 @@
 [submodule "system"]
 	path = system
 	url = https://github.com/kohana/core.git
-[submodule "modules/orm"]
-	path = modules/orm
-	url = https://github.com/kohana/orm.git
-[submodule "modules/cache"]
-	path = modules/cache
-	url = https://github.com/kohana/cache.git
-[submodule "modules/database"]
-	path = modules/database
-	url = https://github.com/kohana/database.git
+[submodule "application/vendor/uglifyjs"]
+	path = application/vendor/uglifyjs
+	url = https://github.com/mishoo/UglifyJS.git
