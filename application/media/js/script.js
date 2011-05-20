@@ -91,7 +91,7 @@ this.Compressr = (function(window, $){
 				return;
 			}
 
-			var code = $.trim(data.codetext);
+			var code = $.trim(data.code);
 
 			// Fail! 
 			if (code && code !== 'undefined') { 
