@@ -1,5 +1,7 @@
 /**
- * Compressr by badsyntax.co
+ * Compressr
+ *
+ * @author     Richard Willis <willis.rh@gmail.com>
  */
 this.Compressr = (function(window, $){
 
@@ -109,7 +111,7 @@ this.Compressr = (function(window, $){
 				showSizes(data.sizes);
 				elem.selectAll.trigger('click');
 			} else {
-				elem.codeTextarea[0].focus();
+				//elem.codeTextarea[0].focus();
 			}
 		}
 
@@ -144,9 +146,45 @@ this.Compressr = (function(window, $){
 		.trigger('change.compressor');	
 	}
 
+	function setCursorPosition(elem, pos, end) {
+
+		if (elem.setSelectionRange) {
+
+			elem.setSelectionRange(pos, end);
+
+		} else if (elem.createTextRange) {
+
+			var range = elem.createTextRange();
+			range.collapse(true);
+			range.moveStart('character', pos);
+			range.moveEnd('character', end || pos);
+			range.select();
+		}
+	}
+		
+	function msgClickHandler(e) {
+
+		var 
+		lineNumber = $(this).data('line') || 0,
+		caretPos = 0,
+		end = false,
+		lines = elem.codeTextarea.val().split('\n');
+
+		for(var i=0,m=lines.length;i<m;i++) {
+			end = caretPos + lines[0].length;
+			if ((i+1) === lineNumber) {
+				break;
+			}
+			caretPos += lines[i].length + 1;
+		}
+
+		setCursorPosition( elem.codeTextarea[0], caretPos, end );
+	}
+
 	function getPanels(){
 
 		if (elem.msgContainer.length) { return; }
+
 
 		$.ajax({
 			url: '/view/messages',
@@ -154,8 +192,12 @@ this.Compressr = (function(window, $){
 			dataType: 'HTML'
 		})
 		.success(function(data){
+
 			elem.msgContainer = $(data).hide();
-			elem.msgContainer.insertAfter('header');
+
+			elem.msgContainer
+			.insertAfter('header')
+			.delegate('li', 'click', msgClickHandler);
 		});
 	}
 
@@ -166,11 +208,28 @@ this.Compressr = (function(window, $){
 				.hide()
 				.removeClass(classes.join(' '))
 				.addClass('message-'+type)
-				.find('ul').empty();
-	
+				.find('ul').empty(),
+			compressorType = elem.select[0].value,
+			line = null,
+			msg = "";
+
 		$.each(messages, function(key, val){
-			list.append('<li>' + val + '</li>');
+			msg += '<li';
+			switch(compressorType) {
+				case 'closure':
+					msg += ' data-line="';
+					msg += val.replace(/^([0-9]+).*$/, '$1');
+					msg += '"';
+					break;
+				case 'yui':
+					msg += ' data-line="';
+					msg += val.replace(/^[^ ]+ ([0-9]+):.*$/, '$1');
+					msg += '"';
+					break;
+			}
+			msg += '>' + val + '</li>';
 		});
+		list.append(msg);
 
 		scrollTop(elem.msgContainer.fadeIn(200));
 	}
